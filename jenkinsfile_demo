@@ -1,0 +1,42 @@
+pipeline {
+  agent {
+    kubernetes {
+      label "jenkins-slave-${UUID.randomUUID().toString()}"
+      defaultContainer 'jnlp'
+      yaml """
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        labels:
+          app: "my-jenkins-slave"
+      spec:
+        serviceAccountName: default
+        containers:
+        - name: jnlp
+          image: docker.io/openshift/jenkins-slave-base-centos7:latest
+          tty: true
+          resources:
+            requests:
+              memory: 368Mi
+              cpu: 200m
+            limits:
+              memory: 512Mi
+              cpu: 300m
+      """
+    }
+  }
+  stages {
+    stage('Build') {
+      steps {
+        sh "oc login ${OPENSHIFT_URL} -u ${USER} -p ${PASSWORD} -n ${PROJECT} --insecure-skip-tls-verify; oc get pods"
+        script {
+            def WORKSPACE = pwd()
+            def BUILD_NUMBER = "${currentBuild.number}"
+            checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[name: 'jmeter-openshift', url: 'https://github.com/SupLinux/jmeter-openshift.git']]])    
+            checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'jmx']], submoduleCfg: [], userRemoteConfigs: [[name: 'jmx', url: 'https://github.com/SupLinux/jmx.git']]])
+            performanceTestBuilder  performanceTesters: [Jmeter()]
+          }
+      }
+    }
+  }
+}
