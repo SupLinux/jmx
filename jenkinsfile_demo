@@ -36,6 +36,7 @@ pipeline {
            checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'openshift']], submoduleCfg: [], userRemoteConfigs: [[name: '', url: 'https://github.com/SupLinux/jmeter-openshift.git']]])
             sh "ls"
             sh "ls jmx"
+            sh "ls openshift"
             performanceTestBuilder  performanceTesters: [Jmeter(jmxIncludingPattern: 'jmx/HRD.jmx')]
           }
       }
