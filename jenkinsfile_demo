@@ -33,7 +33,7 @@ pipeline {
             def WORKSPACE = pwd()
             def BUILD_NUMBER = "${currentBuild.number}"
             checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'jmx']], submoduleCfg: [], userRemoteConfigs: [[name: 'jmx', url: 'https://github.com/SupLinux/jmx.git']]])
-           checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], submoduleCfg: [], userRemoteConfigs: [[name: '', url: 'https://github.com/SupLinux/jmeter-openshift.git']]])
+           checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'openshift']], submoduleCfg: [], userRemoteConfigs: [[name: '', url: 'https://github.com/SupLinux/jmeter-openshift.git']]])
             sh "ls"
             sh "ls jmx"
             performanceTestBuilder  performanceTesters: [Jmeter(jmxIncludingPattern: 'jmx/HRD.jmx')]
