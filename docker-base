@@ -19,11 +19,6 @@ RUN   mkdir /jmeter \
 && mv apache-jmeter-$JMETER_VERSION apache-jmeter \
 && rm apache-jmeter-$JMETER_VERSION.tgz
 
-RUN cd /jmeter/apache-jmeter/ && wget -q -O /tmp/JMeterPlugins-Standard-1.4.0.zip https://jmeter-plugins.org/downloads/file/JMeterPlugins-Standard-1.4.0.zip && unzip -n /tmp/JMeterPlugins-Standard-1.4.0.zip && rm /tmp/JMeterPlugins-Standard-1.4.0.zip
-
-RUN wget -q -O /jmeter/apache-jmeter/lib/ext/pepper-box-1.0.jar https://github.com/raladev/load/blob/master/JARs/pepper-box-1.0.jar?raw=true
-
-RUN cd /jmeter/apache-jmeter/ && wget -q -O /tmp/bzm-parallel-0.7.zip https://jmeter-plugins.org/files/packages/bzm-parallel-0.7.zip && unzip -n /tmp/bzm-parallel-0.7.zip && rm /tmp/bzm-parallel-0.7.zip
 
 RUN wget -P /jmeter/apache-jmeter/lib/ext -q https://repo1.maven.org/maven2/kg/apc/jmeter-plugins-manager/1.3/jmeter-plugins-manager-1.3.jar
 
